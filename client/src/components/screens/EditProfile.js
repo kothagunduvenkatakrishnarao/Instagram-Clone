@@ -1,6 +1,7 @@
 import React,{useState,useContext, useEffect} from 'react';
 import {useHistory} from 'react-router-dom'
 import {UserContext} from '../../App'
+import M from 'materialize-css'
 
 const EditProfile = () => {
     const {state,dispatch} = useContext(UserContext)
@@ -18,6 +19,14 @@ const EditProfile = () => {
 
 
     const updateAbout = () =>{
+        var str = aboutYou;
+        str = str.replace(/(^\s*)|(\s*$)/gi,"");
+        str = str.replace(/[ ]{2,}/gi," ");
+        str = str.replace(/\n /,"\n");
+        if(str.split(' ').length >50)
+        {
+            return M.toast({html:"cannot exceed words more than 50",classes:"#c62828 red darken-3"})
+        }
         fetch('/about',{
             method:"put",
             headers:{
@@ -38,8 +47,9 @@ const EditProfile = () => {
                     about:result.about
                 }
             })
+            M.toast({html:"updated successfully!",classes:"#43a047 green darken-1"})
         })
-        history.push('/profile')
+        
     }
     
     const removePic =()=>{
@@ -65,11 +75,9 @@ const EditProfile = () => {
                 }
             })
         })
-        history.push('/profile');
     }
 
     const updateName =()=>{
-        
         fetch('/editname',{
             method:"put",
             headers:{
@@ -89,8 +97,9 @@ const EditProfile = () => {
                     name:result.name
                 }
             })
+            M.toast({html:"updated successfully!",classes:"#43a047 green darken-1"})
         })
-        history.push('/profile');
+        
     }
 
     const updatepic =()=>{
@@ -130,7 +139,6 @@ const EditProfile = () => {
         }).catch(err=>{
             console.log(err);
         })
-        history.push('/profile');
     }
         
 

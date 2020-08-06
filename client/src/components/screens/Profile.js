@@ -1,5 +1,7 @@
 import React,{useEffect, useState,useContext} from 'react';
 import {UserContext} from '../../App'
+import Loading from './Loading'
+import NoPostsFound from './NoPosts'
 
 const Profile = () => {
 
@@ -22,7 +24,7 @@ const Profile = () => {
     
     return ( 
         <>
-        {state === null ? <div><h2>Loading</h2></div> :
+        {state === null ? <Loading /> :
         <div style={{maxWidth:"1100px",margin:"0px auto"}}>
             <div style={{
                 display:"flex",
@@ -31,8 +33,8 @@ const Profile = () => {
                 borderBottom:"1px solid grey"
             }}>
                 <div style={{ paddingBottom:"10px" }}>
-                    <img className="d-none d-md-block" style={{ width:"240px",height:"240px",borderRadius:"120px"}} src={state.pic}/>
-                    <img className="d-sm-block d-md-none" style={{ width:"140px",height:"140px",borderRadius:"70px"}} src={state.pic}/>
+                    <img className="d-none d-sm-block" style={{ width:"240px",height:"240px",borderRadius:"120px"}} src={state.pic}/>
+                    <img className="d-block d-sm-none" style={{ width:"100px",height:"100px",borderRadius:"50px"}} src={state.pic}/>
                 </div>
                 <div>
                     <h4 style={{textAlign:"center",marginBottom:"20px"}}>{state.name}</h4>
@@ -47,21 +49,24 @@ const Profile = () => {
                             <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>followers</h6>
                             <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>following</h6>
                         </div>
-                        <div className="row d-none d-sm-block" style={{border:"2px solid green",borderRadius:"10px"}}>
+                        <div className="row d-none d-sm-block">
                         { state && state.about.split("\n").map((item)=>
-                            <li>{item}</li>
+                            <li key="item">{item}</li>
                         )}
                         </div>
                     </div>
                 </div>
             </div>
-            { mypics===undefined ? <h2 className="loading">Loading</h2> : mypics.length==0 ? <h2 className="loading">No Posts to Show</h2> :
+            { mypics===undefined ? <Loading/>: mypics.length==0 ?  <NoPostsFound
+                    data="No posts to show. Create some posts."/>  :
                 <div className="gallery">
                     {
                         mypics.map(
                             item=>{
                                 return (
-                                    <img key = {item._id} className="item" src={item.photo} alt={item.title}/>
+                                    <>
+                                    <img key = {item._id} className="item col-10 d-sm-none" src={item.photo} alt={item.title}/>
+                                    <img key = {item._id} className="item d-none d-sm-block d-md-block d-lg-block d-xl-block" src={item.photo} alt={item.title}/></>
                                 );
                             }
                         )

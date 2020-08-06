@@ -3,13 +3,22 @@ const router=express.Router()
 const mongoose = require('mongoose')
 const Post=mongoose.model('Post')
 const requiredLogin = require('../middleware/requiredLogin')
+const cloudinary = require('cloudinary');
+const {cloud_name,api_key,api_secret}= require('../config/keys')
 
+
+cloudinary.config({ 
+    cloud_name: cloud_name, 
+    api_key: api_key, 
+    api_secret: api_secret 
+});
 
 
 router.get('/allposts',requiredLogin,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name pic")
     .populate("comments.postedBy","_id name pic")
+    .sort('-createdAt')
     .then(posts=>{
         res.json({posts})
     }).catch(err=>{
@@ -22,6 +31,7 @@ router.get('/subpost',requiredLogin,(req,res)=>{
     Post.find({postedBy:{$in:req.user.following}})
     .populate("postedBy","_id name pic")
     .populate("comments.postedBy","_id name pic")
+    .sort('-createdAt')
     .then(posts=>{
         res.json({posts})
     }).catch(err=>{
@@ -53,6 +63,7 @@ router.post('/createpost',requiredLogin,(req,res)=>{
 router.get('/mypost',requiredLogin,(req,res)=>{
     Post.find({ postedBy: req.user._id})
     .populate("postedBy","_id name")
+    .sort('-createdAt')
     .then(mypost=>{
         res.json({mypost})
     }).catch(err=>{
@@ -114,23 +125,25 @@ router.put('/comment',requiredLogin,(req,res)=>{
 })
 
 router.delete('/deletepost/:postId',requiredLogin,(req,res)=>{
-    Post.findOne({_id:req.params.postId})
-    .populate("postedBy","_id")
-    .exec((err,post)=>{
-        if(err||!post)
-        {
-            return res.status(422).json({error:err})
-        }
-        if(post.postedBy._id.toString() === req.user._id.toString())
-        {
-            post.remove()
-            .then(result=>{
-                res.json(result)
-            }).catch(err=>{
-                console.log(err)
-            })
-        }
-    })
+    cloudinary.v2.uploader.destroy(req.body.publicId).then(
+        Post.findOne({_id:req.params.postId})
+        .populate("postedBy","_id")
+        .exec((err,post)=>{
+            if(err||!post)
+            {
+                return res.status(422).json({error:err})
+            }
+            if(post.postedBy._id.toString() === req.user._id.toString())
+            {
+                post.remove()
+                .then(result=>{
+                    res.json(result)
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }
+        })
+    )
 })
 
 router.put('/deletecomment',requiredLogin,(req,res)=>{

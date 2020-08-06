@@ -14,6 +14,10 @@ const userSchema =new mongoose.Schema({
         type:String,
         required:true
     },
+    resetToken:String,
+    expireToken:Date,
+    isVerified:String,
+    isVerifiedExpire:Date,
     followers:[{
         type:ObjectId,
         ref:"User"

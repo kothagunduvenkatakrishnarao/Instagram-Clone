@@ -9,6 +9,7 @@ const Signup = () => {
     const [email,setEmail]= useState("")
     const [image,setImage]= useState("")
     const [url,setUrl]= useState(undefined)
+    const [showButton,setButton] = useState(true);
 
      
     useEffect(()=>{
@@ -50,6 +51,7 @@ const Signup = () => {
         }).then(res=>res.json())
         .then(data=>{
             if(data.error){
+                setButton(true)
                 M.toast({html: data.error,classes:"#c62828 red darken-3"})
             }
             else
@@ -63,6 +65,7 @@ const Signup = () => {
     }
 
     const PostData = ()=>{
+        setButton(false)
         if(image)
         {
             uploadPic();
@@ -103,10 +106,18 @@ const Signup = () => {
                     <input className="file-path validate" type="text"/>
                 </div>
                 </div>
-                <button className="btn btn-primary"
-                onClick={()=>PostData()}>
-                    SignUp
-                </button>
+                {
+                    showButton?
+                    <button className="btn btn-primary"
+                        onClick={()=>PostData()}>
+                            SignUp
+                    </button>
+                    :
+                    <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        signing up...
+                    </button>
+                }
                 <h5>
                     <Link to="/signin">Already have an account ?</Link>
                 </h5>

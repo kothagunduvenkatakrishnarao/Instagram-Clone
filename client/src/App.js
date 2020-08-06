@@ -11,6 +11,9 @@ import UserProfile from './components/screens/UserProfile'
 import SubscribedPosts from './components/screens/SubscribedPosts'
 import EditProfile from './components/screens/EditProfile'
 import SavedPosts from './components/screens/SavedPosts'
+import ResetPassword from './components/screens/Reset'
+import SetNewPassword from './components/screens/SetNewPassword'
+import Verify from './components/screens/Verify'
 import {reducer,initialState} from './reducers/userReducer'
 
 
@@ -31,7 +34,8 @@ const Routing=()=>{
     }
     else
     {
-      history.push('/signin')
+      if(!history.location.pathname.startsWith('/reset') && !history.location.pathname.startsWith('/verification'))
+          history.push('/signin')
     }
   },[])
 
@@ -46,6 +50,9 @@ const Routing=()=>{
       <Route path="/myfollowingpost"><SubscribedPosts/></Route>
       <Route path="/editprofile"><EditProfile/></Route>
       <Route path="/savedposts"><SavedPosts/></Route>
+      <Route exact path="/reset"><ResetPassword/></Route>
+      <Route path="/reset/:token"><SetNewPassword/></Route>
+      <Route path="/verification/:token"><Verify/></Route> 
       </>
      );
 }

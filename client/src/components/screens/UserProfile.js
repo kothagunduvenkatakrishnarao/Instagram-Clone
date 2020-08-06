@@ -1,6 +1,8 @@
 import React,{useEffect, useState,useContext} from 'react';
 import {UserContext} from '../../App';
 import {useParams} from 'react-router-dom'
+import Loading from './Loading'
+import NoPostsFound from './NoPosts';
 
 const UserProfile = () => {
 
@@ -90,7 +92,7 @@ const UserProfile = () => {
 
     return ( 
     <>
-        {profile === null ? <h2 className="loading">Loading</h2> : 
+        {profile === null ? <Loading/> : profile.user===undefined ? <NoPostsFound data="No account found"/>:
         <div style={{maxWidth:"1100px",margin:"0px auto"}}>
             <div style={{
                 display:"flex",
@@ -125,11 +127,14 @@ const UserProfile = () => {
             </div>
             <div className="gallery">
                 {
-                    profile.posts.map(
-                        item=>{
-                            return  <img key = {item._id} className="item" src={item.photo} alt={item.title}/>
-                        }
-                    )
+                        profile.posts.length === 0 ?
+                            <NoPostsFound data="No posts to show"/>
+                            :
+                            profile.posts.map(
+                                item=>{
+                                    return  <img key = {item._id} className="item" src={item.photo} alt={item.title}/>
+                                }
+                            )
                 }
             </div>
         </div>

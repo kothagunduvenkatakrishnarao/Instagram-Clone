@@ -69,7 +69,16 @@ input:focus {
 
 .loading{
   margin-top: 15%;
-  margin-left: 35%;
+  margin-left: 40%;
   margin-right: 35%;
   font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.collection-item{
+  width: 100%;
+}
+
+.button-btn {
+  position: absolute;
+  top: 50%;
 }

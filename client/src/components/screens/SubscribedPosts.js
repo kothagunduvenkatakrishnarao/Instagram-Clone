@@ -3,12 +3,15 @@ import {UserContext} from '../../App'
 import {Link} from 'react-router-dom'
 import Tooltip from '@material-ui/core/Tooltip';
 import M from 'materialize-css'
+import Loading from './Loading'
+import NoPostsFound from  './NoPosts'
 
 
 const SubscribedPosts = () => {
     const [data,setData]=useState(undefined)
     const {state,dispatch} = useContext(UserContext)
     const [com,setComment] = useState("")
+    const [showbutton,setButton] = useState(true)
 
     
     useEffect(()=>{
@@ -102,8 +105,10 @@ const SubscribedPosts = () => {
     }
 
     const makeComment = (postId)=>{
+        setButton(false)
         if(com.length === 0)
         {
+            setButton(true)
             return M.toast({html:"cannont post empty comment",classes:"#c62828 red darken-3"})
         }
         fetch('/comment',{
@@ -130,13 +135,17 @@ const SubscribedPosts = () => {
         }).catch(err=>{
             console.log(err);
         })
+        setButton(true)
     }
 
 
     
     return (
         <>
-        {data ===undefined ? <h2 className="loading" >Loading</h2>: data.length==0 ? <h2 className="loading">No posts to show, Please Follow some one</h2> :
+        {data ===undefined ? <Loading/>: data.length==0 ? 
+            <NoPostsFound
+            data="No posts to show. Follow some one."/>
+         :
         <div className="home">
             {
                 data.map(item=>{
@@ -164,10 +173,10 @@ const SubscribedPosts = () => {
                                 item.comments.length===0 ? <h6>Be first to comment</h6> :
                                 item.comments.map(record=>{
                                     return(
-                                        <> 
-                                        { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
+                                        <div key={record._id} style={{marginTop:"3%"}}> 
+                                        { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
                                         <p key={record._id}><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link>{record.text}</p>
-                                        </>
+                                        </div>
                                     )
                                 })
                             }
@@ -181,7 +190,19 @@ const SubscribedPosts = () => {
                                     <input type="text" placeholder="Comment" value={com} onChange={(e)=>setComment(e.target.value)}/>
                                 </div>
                                 <div style={{paddingTop:"5%"}}>
-                                <Tooltip title="post comment"><button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={()=>makeComment(item._id)}><i className="material-icons" style={{float:"right"}}>send</i></button></Tooltip>
+                                
+                                        { showbutton ?
+                                        <Tooltip title="post comment">
+                                        <button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={
+                                            ()=>makeComment(item._id)}>
+                                        <i className="material-icons" style={{float:"right"}}>send</i>
+                                        </button></Tooltip>
+                                        :
+                                        <button className="btn btn-primary" type="button" disabled>
+                                            <span className="spinner-border spinner-border-sm" role="status"></span>
+                                        </button>
+                                        }
+                                        
                                 </div>
                             </div>
                             </form>

@@ -185,4 +185,14 @@ router.put('/unsave',requiredLogin,(req,res)=>{
     })
 })
 
+router.post('/searchusers',(req,res)=>{
+        let userpattern = new RegExp(req.body.query,'i');
+        User.find({name:{$regex:userpattern}})
+        .then(user=>{
+            res.json({user})
+        }).catch(err=>{
+            console.log(err);
+        })
+})
+
 module.exports = router

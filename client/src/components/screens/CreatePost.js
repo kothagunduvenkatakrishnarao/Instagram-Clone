@@ -7,6 +7,7 @@ const CreatePost = () => {
     const [body,setBody] = useState("")
     const [image,setImg] = useState("")
     const [url,setUrl] = useState("")
+    const [showButton,setButton] = useState(true);
 
     useEffect(()=>
     {
@@ -31,6 +32,7 @@ const CreatePost = () => {
                 else
                 {
                     M.toast({html:"created post successfully!",classes:"#43a047 green darken-1"})
+                    setButton(true)
                     history.push('/')
                 }
             }).catch(err=>{
@@ -40,7 +42,13 @@ const CreatePost = () => {
     },[url])
 
     const postDetails = ()=>{
+        setButton(false)
         const data=new FormData();
+        if(title==="" || body==="" || image==="" )
+        {
+            setButton(true)
+            return M.toast({html:"Must fill all the fields",classes:"#c62828 red darken-3"});
+        }
         data.append("file",image)
         data.append("upload_preset","insta-clone")
         data.append("cloud_name","krishna-cloud")
@@ -54,7 +62,6 @@ const CreatePost = () => {
             console.log(err);
         })
 
-        
     }
 
 
@@ -75,7 +82,20 @@ const CreatePost = () => {
                 <input className="file-path validate" type="text"/>
             </div>
             </div>
-            <button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={()=>postDetails()}>Submit post</button>
+            {
+                showButton ? 
+                <button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={
+                    ()=>postDetails()
+                    }>
+                        Submit post
+                </button>
+                :
+                <button className="btn btn-primary" type="button" disabled>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    uploading...
+                </button>
+
+            }
         </div>
      );
 }
