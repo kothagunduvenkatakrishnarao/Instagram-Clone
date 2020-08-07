@@ -44,10 +44,6 @@ input:focus {
   margin-top: 30px; 
 }
 
-.sidenav{
-  width: 100px;
-}
-
 .create{
   padding:20px;
   text-align: center;
@@ -65,6 +61,9 @@ input:focus {
 
 .nav-links{
   margin-right: 15%;
+}
+.sidenav{
+  width: 250px;
 }
 
 

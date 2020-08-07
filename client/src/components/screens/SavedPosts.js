@@ -211,7 +211,7 @@ const SavedPosts = () => {
                                         )
                                     })
                             }
-                            {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
+                            {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down offset-6" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
                             {
                                 showMoreIcon==false &&
                                 item.comments.slice(3,).map(record=>{
@@ -223,7 +223,7 @@ const SavedPosts = () => {
                                     )
                                 })
                             }
-                            {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
+                            {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up offset-6" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
                             </div>
                             </div>
                             <form style={{paddingTop:"2%"}} onSubmit={(e)=>{

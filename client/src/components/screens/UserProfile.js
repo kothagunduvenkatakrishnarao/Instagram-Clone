@@ -100,29 +100,43 @@ const UserProfile = () => {
                 margin:"18px 0px",
                 borderBottom:"1px solid grey"
             }}>
-                <div>
-                    <img style={{ width:"160px",height:"160px",borderRadius:"80px"}}
-                    src={profile.user.pic}/>
+                <div style={{ paddingBottom:"10px",paddingTop:"40px"}}>
+                    <img className="d-none d-sm-block" style={{ width:"240px",height:"240px",borderRadius:"120px"}} src={profile.user.pic}/>
+                    <img className="d-block d-sm-none" style={{ width:"100px",height:"100px",borderRadius:"50px"}} src={profile.user.pic}/>
                 </div>
                 <div>
-                    <h4>{profile.user.name}</h4>
-                    <h4>{profile.user.email}</h4>
-                    <div style={{display:"flex",justifyContent:"space-between",width:"108%"}}>
-                        <h6>{profile.posts.length} posts</h6>
-                        <h6>{profile.user.followers.length} followers</h6>
-                        <h6>{profile.user.following.length} following</h6>
+                    <h4 style={{textAlign:"center",marginBottom:"20px"}}>{profile.user.name}</h4>
+                    <h6 style={{textAlign:"center",marginBottom:"20px"}}>{profile.user.email}</h6>
+                    <div>
+                        <div className="row">
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>{profile.posts.length}</h6>
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>{profile.user.followers.length}</h6>
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>{profile.user.following.length}</h6>
+                        </div>
+                        <div className="row">
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>Posts</h6>
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>followers</h6>
+                            <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>following</h6>
+                        </div>
+                        {isfollow ?
+                            <button className="btn btn-danger col-12" style={{marginBottom:"10px"}}
+                            onClick={()=>unfollowUser()}>
+                                unfollow
+                            </button>
+                            :
+                            <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
+                            onClick={()=>followUser()}>
+                                Follow
+                            </button>
+                        }
+                        <div className="badge badge-pill badge-primary d-none d-sm-block">
+                        { profile.user.about.split("\n").map((item)=>
+                            <li key="item">{item}</li>
+                        )}
+                        </div>
+                    
+                    
                     </div>
-                    {isfollow ?
-                    <button className="btn waves-effect waves-light #64b5f6 blue darken-1 "
-                    onClick={()=>unfollowUser()}>
-                        unfollow
-                    </button>
-                    :
-                    <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
-                    onClick={()=>followUser()}>
-                        Follow
-                    </button>
-                    }
                 </div>
             </div>
             <div className="gallery">
@@ -132,7 +146,11 @@ const UserProfile = () => {
                             :
                             profile.posts.map(
                                 item=>{
-                                    return  <img key = {item._id} className="item" src={item.photo} alt={item.title}/>
+                                    return  (
+                                        <>
+                                        <img key = {item._id} className="item col-10 d-sm-none" src={item.photo} alt={item.title}/>
+                                        <img key = {item._id} className="item d-none d-sm-block d-md-block d-lg-block d-xl-block" src={item.photo} alt={item.title}/></>
+                                    );
                                 }
                             )
                 }

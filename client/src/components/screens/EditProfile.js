@@ -1,5 +1,4 @@
 import React,{useState,useContext, useEffect} from 'react';
-import {useHistory} from 'react-router-dom'
 import {UserContext} from '../../App'
 import M from 'materialize-css'
 
@@ -7,8 +6,9 @@ const EditProfile = () => {
     const {state,dispatch} = useContext(UserContext)
     const [name,setName] = useState(state && state.name)
     const [image,setImage]= useState(undefined)
-    const [aboutYou,setAbout]= useState(undefined)
-    const history= useHistory()
+    const [aboutYou,setAbout]= useState(state && state.about)
+    const [showNameutton,setNameButton]= useState(true);
+    const [showAboutButton,setAboutButton]= useState(true);
 
     useEffect(()=>{
         if(image)
@@ -19,13 +19,15 @@ const EditProfile = () => {
 
 
     const updateAbout = () =>{
+        setAboutButton(false)
         var str = aboutYou;
         str = str.replace(/(^\s*)|(\s*$)/gi,"");
         str = str.replace(/[ ]{2,}/gi," ");
         str = str.replace(/\n /,"\n");
-        if(str.split(' ').length >50)
+        if(str.split(' ').length >20 || str.split(' ').length<=0)
         {
-            return M.toast({html:"cannot exceed words more than 50",classes:"#c62828 red darken-3"})
+            setAboutButton(true)
+            return M.toast({html:"cannot exceed words more than 20 or Empty..",classes:"#c62828 red darken-3"})
         }
         fetch('/about',{
             method:"put",
@@ -39,6 +41,7 @@ const EditProfile = () => {
         })
         .then(res=>res.json())
         .then(result=>{
+            setAboutButton(true)
             console.log(result);
             localStorage.setItem("user",JSON.stringify({...state,about:result.about}))
             dispatch({
@@ -49,6 +52,7 @@ const EditProfile = () => {
             })
             M.toast({html:"updated successfully!",classes:"#43a047 green darken-1"})
         })
+        
         
     }
     
@@ -78,6 +82,16 @@ const EditProfile = () => {
     }
 
     const updateName =()=>{
+        if(name===null)
+        {
+            return M.toast({html:"Name Filed is Empty",classes:"#c62828 red darken-3"});
+        }
+        else if(name===state.name)
+        {
+            return M.toast({html:"Name should not be as before",classes:"#c62828 red darken-3"});
+        }
+        setNameButton(false)
+        console.log(showNameutton)
         fetch('/editname',{
             method:"put",
             headers:{
@@ -90,6 +104,7 @@ const EditProfile = () => {
         }).then(res=>res.json())
         .then(result=>{
             console.log(result)
+            setNameButton(true)
             localStorage.setItem("user",JSON.stringify({...state,name:result.name}));
             dispatch({
                 type:"UPDATENAME",
@@ -99,6 +114,7 @@ const EditProfile = () => {
             })
             M.toast({html:"updated successfully!",classes:"#43a047 green darken-1"})
         })
+        
         
     }
 
@@ -140,10 +156,7 @@ const EditProfile = () => {
             console.log(err);
         })
     }
-        
-
-    return ( 
-        
+    return (
         <div>
             {state===null ? <h2 className="loading">Loading .... </h2> : 
             <div className="card auth-card">
@@ -161,28 +174,44 @@ const EditProfile = () => {
             {(state.pic).split("/")[7].split(".")[0] !== "default_d2e3bm" ? <i className="small material-icons" onClick={()=>{removePic()}}>delete</i>: ""}
             </div>
             <div className="row">
-                <div className="input-field col-8 col-md-8">
+                <div className="input-field col-7 col-md-7">
                 <input
                 type="text" 
                 placeholder={state.name}
-                value={name}
+                value={name===null ? state.name : name}
                 onChange={(e)=>setName(e.target.value)}/>
                 </div>
-                <div className="input-field col-2 col-md-1">
-                    <button className="btn btn-primary" onClick={()=>{updateName()}}>Update</button>
-                </div>
+               
+                    {
+                        showNameutton ?
+                        <div className="input-field col-5 col-md-5">
+                        <button className="btn btn-primary" onClick={
+                            ()=>{updateName()}
+                        }>Update</button></div>
+                        :
+                        <button className="btn btn-primary col-5 col-md-5" type="button" disabled>
+                            <span className="spinner-border spinner-border-sm " role="status" aria-hidden="true"></span>Updating...
+                        </button>
+                    }
             </div>
             <div className="row">
-                <div className="input-field col-8 col-md-8">
+                <div className="input-field col-7 col-md-7">
                 <textarea cols="10"
+                rows="7"
                 type="text" 
                 placeholder="About your self"
-                value={aboutYou}
+                value={aboutYou===null ? state.about : aboutYou}
                 onChange={(e)=>setAbout(e.target.value)}/>
                 </div>
-                <div className="input-field col-2 col-md-1">
-                    <button className="btn btn-primary" onClick={()=>{updateAbout()}}>Update</button>
-                </div>
+                {
+                        showAboutButton?
+
+                        <div className="input-field col-5 col-md-5">
+                        <button className="btn btn-primary" onClick={()=>{updateAbout()}}>Update</button></div>
+                        :
+                        <button className="btn btn-primary col-5 col-md-5" type="button" disabled>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Updating...</button>
+                }
             </div>
         </div> }
         </div>
