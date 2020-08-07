@@ -209,4 +209,64 @@ router.put('/verifymyaccount',(req,res)=>{
     })
 })
 
+
+
+router.post('/resendverification',(req,res)=>{
+    crypto.randomBytes(64,(err,buffer)=>{
+        if(err)
+        {
+            console.log(err)
+            return ;
+        }
+        else{
+            const token  = buffer.toString("hex");
+            User.findOne({email:req.body.email})
+            .then(user=>{
+                if(!user)
+                {
+                    return res.status(422).json({error:"No user found!..."})
+                }
+                else if(user.isVerifiedExpire===undefined)
+                {
+                    return res.status(422).json({message:"User is already Verified!..."})
+                }
+                else{
+                    user.isVerified=token,
+                    user.isVerifiedExpire=Date.now()+1800000
+                    user.save()
+                    .then(user=>{
+                        transporter.sendMail({
+                            to:user.email,
+                            from:SEND_MAIL,
+                            suject:"Verification mail",
+                            html:`
+                            <p>Verify Your Insta-clone Account</p>
+                            <h5><a href="${SEND_REDIRECTION}/verification/${token}">click here</a> to verify your Account</h5>
+                            <h5>The link will only work for 1/2hr</h5>
+                            `
+                        },(err,result)=>{
+                            if(err)
+                            {
+                                console.log(err);
+                                return ;
+                            }
+                            else{
+                                console.log(result);
+                            }
+                        })
+                        res.json({message:"Verification mail has set to your mail!..."})
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                    })
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        }
+    })
+    
+})
+
 module.exports=router

@@ -12,6 +12,7 @@ const SavedPosts = () => {
     const [data,setData]=useState(undefined)
     const [com,setComment] = useState("")
     const [showbutton,setButton] = useState(true)
+    const [showMoreIcon,setshowMoreIcon] = useState(true)
 
     useEffect(()=>{
         fetch('/showsavedposts',{
@@ -98,6 +99,7 @@ const SavedPosts = () => {
                 }
                 else return item
             })
+            M.toast({html:"comment Deleted Successfully",classes:"#43a047 green darken-1"})
             setData(newData)
         })
         .catch(err=>{
@@ -191,21 +193,39 @@ const SavedPosts = () => {
                             }
                         </Tooltip>
                         <Tooltip title="unsave post">
-                            <i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>UnsavePost(item._id)}>remove_circle</i>
+                            <i className="material-icons" style={{float:"right"}} onClick={()=>UnsavePost(item._id)}>bookmark</i>
                         </Tooltip>
+                        <div>
                             <h6>{item.likes.length} likes</h6>
                             <h6>{item.title}</h6>
                             <p>{item.body}</p>
-                            {   item.comments.length===0 ? <h6>Be first to comment</h6> :
-                                item.comments.map(record=>{
+                            <div>
+                            {
+                                item.comments.length===0 ? <h6>Be first to comment</h6> : 
+                                    item.comments.slice(0,3).map(record=>{
+                                        return(
+                                            <div key={record._id} style={{marginTop:"3%"}}> 
+                                            { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
+                                            <p ><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link> {record.text}</p>
+                                            </div>
+                                        )
+                                    })
+                            }
+                            {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
+                            {
+                                showMoreIcon==false &&
+                                item.comments.slice(3,).map(record=>{
                                     return(
                                         <div key={record._id} style={{marginTop:"3%"}}> 
                                         { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
-                                        <p key={record._id}><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link>{record.text}</p>
+                                        <p ><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link> {record.text}</p>
                                         </div>
                                     )
                                 })
                             }
+                            {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
+                            </div>
+                            </div>
                             <form style={{paddingTop:"2%"}} onSubmit={(e)=>{
                                 e.preventDefault()
                             }}>

@@ -2,6 +2,7 @@ import React,{useContext,useRef,useEffect, useState}  from 'react';
 import {UserContext} from '../App'
 import {Link,useHistory} from 'react-router-dom'
 import M from 'materialize-css'
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const Navbar = () => {
@@ -16,14 +17,19 @@ const Navbar = () => {
     const renderList = ()=>{
       if(state){
           return  [
-            <li key="1"><i data-target="modal1" className="material-icons modal-trigger" style={{color:"black",marginLeft:"50px"}}>search</i></li>,
-            <li key="2"><Link to="/profile">Profile</Link></li>,
-            <li key="3"><Link to="/createpost">Create Post</Link></li>,
-            <li key="4"><Link to="/myfollowingpost">My following Posts</Link></li>,
-            <li key="5"><Link to="/editprofile">Edit Profile</Link></li>,
-            <li key="6"><Link to="/savedposts">SavedPosts</Link></li>,
-            <li key="7">
-              <button className="btn btn-danger"
+
+            
+            <Tooltip title="search user">
+            <li key="1"><Link><i data-target="modal1" className="fa fa-search fa-2x modal-trigger" style={{color:"black"}}></i></Link></li>
+            </Tooltip>,
+            <Tooltip title="create post"><li key="3"><Link to="/createpost"><i className="fa fa-plus-square-o fa-2x"></i></Link></li></Tooltip>,
+            <Tooltip title="saved posts"><li key="5"><Link to="/savedposts"><i className="fa fa-floppy-o fa-2x"></i></Link></li></Tooltip>,
+            
+            <Tooltip title="user profile"><li key="2"><Link to="/profile"><img src={state && state.pic} style={{width:"26px",height:"26px",borderRadius:"13px"}}/></Link></li></Tooltip>,
+            <Tooltip title="settings"><li key="6"><Link to="/editprofile"><i className="fa fa-cog fa-2x"></i></Link></li></Tooltip>,
+            <Tooltip title="log out">
+            <li key="7"><Link>
+              <i className="fa fa-sign-out fa-2x" style={{color:"black"}}
                 onClick={()=>{
                   localStorage.removeItem("jwt")
                   localStorage.removeItem("user")
@@ -31,10 +37,13 @@ const Navbar = () => {
                     type:"CLEAR",
                   })
                   history.push("/signin")
-                }}>
-                Logout
-            </button>
-            </li>
+                }}></i></Link></li></Tooltip>,
+                <Tooltip title="my following post"><li key="4"><Link to="/myfollowingpost">
+              <span className="fa-stack" style={{fontSize:"105%",marginBottom:"35px",marginLeft:"-5px"}}>
+              <i className="fa fa-sticky-note-o fa-stack-2x" ></i>
+              <i className="fa fa-users fa-stack-1x fa-inverse" style={{color:"black"}}></i>
+            </span>
+              </Link></li></Tooltip>
           ]
       }
       else{
@@ -77,12 +86,12 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
-      <ul className="sidenav" id="mobile-demo">
+      <ul className="sidenav right" id="mobile-demo">
             {renderList()}
       </ul>
       <div id="modal1" className="modal col-10 col-sm-7" ref={searchModal} >
         <div>
-        <i className="material-icons modal-close" style={{color:"red",float:"right"}}>close</i>
+        <i className="fa fa-close modal-close" style={{color:"red",float:"right"}}></i>
         </div>
         <div className="modal-content">
           <input
@@ -92,7 +101,7 @@ const Navbar = () => {
           onChange={(e)=>fetchUsers(e.target.value)}
           />
           <div style={{height:"150px"}}>
-          <ul className="collection" style={{height:"150px",overflowY:"scroll"}}>
+          <ul className="collection" style={{height:"150px",overflowY:"auto"}}>
               {userDetails.map(item=>{
               return <Link to={state._id !=  item._id ?"/profile/"+item._id : "/profile"} onClick={
                 ()=>M.Modal.getInstance(searchModal.current).close()

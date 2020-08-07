@@ -14,6 +14,7 @@ import SavedPosts from './components/screens/SavedPosts'
 import ResetPassword from './components/screens/Reset'
 import SetNewPassword from './components/screens/SetNewPassword'
 import Verify from './components/screens/Verify'
+import ResendVerification from './components/screens/ResendVerifications'
 import {reducer,initialState} from './reducers/userReducer'
 
 
@@ -34,7 +35,7 @@ const Routing=()=>{
     }
     else
     {
-      if(!history.location.pathname.startsWith('/reset') && !history.location.pathname.startsWith('/verification'))
+      if(!history.location.pathname.startsWith('/resendverification') &&!history.location.pathname.startsWith('/reset') && !history.location.pathname.startsWith('/verification'))
           history.push('/signin')
     }
   },[])
@@ -53,6 +54,7 @@ const Routing=()=>{
       <Route exact path="/reset"><ResetPassword/></Route>
       <Route path="/reset/:token"><SetNewPassword/></Route>
       <Route path="/verification/:token"><Verify/></Route> 
+      <Route path="/resendverification"><ResendVerification/></Route> 
       </>
      );
 }

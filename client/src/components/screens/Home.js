@@ -12,6 +12,7 @@ const Home = () => {
     const {state,dispatch} = useContext(UserContext)
     const [com,setComment] = useState("")
     const [showbutton,setButton] = useState(true)
+    const [showMoreIcon,setshowMoreIcon] = useState(true)
 
     useEffect(()=>{
         fetch('/allposts',{
@@ -95,6 +96,7 @@ const Home = () => {
                 }
                 else return item
             })
+            M.toast({html:"comment Deleted Successfully",classes:"#43a047 green darken-1"})
             setData(newData)
         })
         .catch(err=>{
@@ -204,6 +206,7 @@ const Home = () => {
 
 
 
+
     return ( 
         <>
         { data===undefined ? <Loading/> : data.length==0 ? <NoPostsFound
@@ -231,20 +234,33 @@ const Home = () => {
                             </Tooltip>
                             {state.saved.includes(item._id) ?
                                 <Tooltip title="unsave post">
-                                    <i className="material-icons" style={{float:"right",color:"red"}}  onClick={()=>{UnsavePost(item._id)}}>remove_circle</i>
+                                    <i className="material-icons" style={{float:"right"}}  onClick={()=>{UnsavePost(item._id)}}>bookmark</i>
                                 </Tooltip>
                                 :
                                 <Tooltip title="save post">
-                                    <i className="material-icons" style={{float:"right",color:"blue"}}  onClick={()=>{SavePost(item._id)}}>save</i>
+                                    <i className="material-icons" style={{float:"right"}}  onClick={()=>{SavePost(item._id)}}>bookmark_border</i>
                                 </Tooltip>
                             }
                             <div>
                             <h6>{item.likes.length} likes</h6>
                             <h6>{item.title}</h6>
                             <p>{item.body}</p>
+                            <div>
                             {
-                                item.comments.length===0 ? <h6>Be first to comment</h6> :
-                                item.comments.map(record=>{
+                                item.comments.length===0 ? <h6>Be first to comment</h6> : 
+                                    item.comments.slice(0,3).map(record=>{
+                                        return(
+                                            <div key={record._id} style={{marginTop:"3%"}}> 
+                                            { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
+                                            <p ><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link> {record.text}</p>
+                                            </div>
+                                        )
+                                    })
+                            }
+                            {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down offset-6" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
+                            {
+                                showMoreIcon==false &&
+                                item.comments.slice(3,).map(record=>{
                                     return(
                                         <div key={record._id} style={{marginTop:"3%"}}> 
                                         { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
@@ -253,7 +269,9 @@ const Home = () => {
                                     )
                                 })
                             }
+                            {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up offset-6" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
                             </div>
+                        </div>
                             <form style={{paddingTop:"2%"}} onSubmit={(e)=>{
                                 e.preventDefault()
                             }}>
@@ -291,3 +309,10 @@ const Home = () => {
 }
  
 export default Home;
+
+
+
+/*
+
+
+*/

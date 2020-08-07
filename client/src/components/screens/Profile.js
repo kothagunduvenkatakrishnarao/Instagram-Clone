@@ -7,7 +7,6 @@ const Profile = () => {
 
     const [mypics,setPics] = useState(undefined)
     const {state,dispatch} = useContext(UserContext)
-    var data;
     useEffect(()=>{
         fetch('/mypost',{
             headers:{
@@ -49,7 +48,7 @@ const Profile = () => {
                             <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>followers</h6>
                             <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>following</h6>
                         </div>
-                        <div className="row d-none d-sm-block">
+                        <div className="badge badge-pill badge-primary d-none d-sm-block">
                         { state && state.about.split("\n").map((item)=>
                             <li key="item">{item}</li>
                         )}
@@ -57,7 +56,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            { mypics===undefined ? <Loading/>: mypics.length==0 ?  <NoPostsFound
+            { mypics===undefined ? <Loading/>: mypics.length===0 ?  <NoPostsFound
                     data="No posts to show. Create some posts."/>  :
                 <div className="gallery">
                     {

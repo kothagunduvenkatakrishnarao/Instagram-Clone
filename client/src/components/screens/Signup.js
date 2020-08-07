@@ -8,6 +8,7 @@ const Signup = () => {
     const [password,setPassword]= useState("")
     const [email,setEmail]= useState("")
     const [image,setImage]= useState("")
+    const [showpassword,setShowPassword]=useState(false)
     const [url,setUrl]= useState(undefined)
     const [showButton,setButton] = useState(true);
 
@@ -91,12 +92,24 @@ const Signup = () => {
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
                 />
+                <div style={{display:"inline"}}>
                 <input 
-                type="password" 
+                className="col-10"
+                type={showpassword ? "text":"password"} 
                 placeholder="password" 
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
                 />
+                {showpassword ?
+                <i className="material-icons col-2" onClick={()=>{
+                    setShowPassword(!showpassword);
+                }}>visibility</i>
+                :
+                    <i className="material-icons col-2" onClick={()=>{
+                        setShowPassword(!showpassword);
+                    }}>visibility_off</i>
+                }
+                </div>
                 <div className="file-field">
                 <div className="btn #64b5f6 blue darken-1">
                     <span>Profile Image</span>

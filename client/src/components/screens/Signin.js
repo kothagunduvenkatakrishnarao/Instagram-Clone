@@ -7,6 +7,7 @@ const Signin = () => {
     const {state,dispatch} =useContext(UserContext)
     const history= useHistory()
     const [password,setPassword]= useState("")
+    const [showpassword,setShowPassword]=useState(false)
     const [email,setEmail]= useState("")
     const [showButton,setButton] = useState(true);
 
@@ -53,12 +54,25 @@ const Signin = () => {
                 value={email}
                 onChange={(e)=>setEmail(e.target.value)}
                 />
+                <div>
                 <input 
-                type="password" 
-                placeholder="password" 
+                className="col-10"
+                type={showpassword ? "text":"password"} 
+                placeholder="password"
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
                 />
+                {showpassword ?
+                <i className="material-icons col-2" onClick={()=>{
+                    setShowPassword(!showpassword);
+                }}>visibility</i>
+                :
+                    <i className="material-icons col-2" onClick={()=>{
+                        setShowPassword(!showpassword);
+                    }}>visibility_off</i>
+                }
+                </div>
+
                 {showButton?
                 <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
                 onClick={()=>PostData()}>
@@ -70,12 +84,19 @@ const Signin = () => {
                     loging in...
                 </button>
                 }
+                <div className="row" style={{paddingTop:"20px"}}>
+                <h6 className="col-12 col-md-6">
+                    <Link to="/reset">Reset Password ?</Link>
+                </h6>
+                <h6 className="col-12 col-md-6">
+                    <Link to="/resendverification">Request Verification ?</Link>
+                </h6>
+                </div>
                 <h5>
                     <Link to="/signup">Don't have an account ?</Link>
                 </h5>
-                <h6>
-                    <Link to="/reset">Reset Password ?</Link>
-                </h6>
+                
+                
             </div>
         </div>
      );
