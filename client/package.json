@@ -12,8 +12,10 @@
     "cloudinary-react": "^1.6.6",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.1",
+    "react-detect-offline": "^2.4.0",
     "react-dom": "^16.13.1",
     "react-infinite-loader": "^1.0.4",
+    "react-infinite-scroll-component": "^5.0.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },

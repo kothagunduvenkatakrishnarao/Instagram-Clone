@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import Tooltip from '@material-ui/core/Tooltip';
 import M from 'materialize-css'
 import NoPostsFound from  './NoPosts'
+import {Online,Offline} from 'react-detect-offline'
 
 
 const Home = () => {
@@ -204,51 +205,58 @@ const Home = () => {
         })
     }
 
-
-
-
-    return ( 
-        <>
-        { data===undefined ? <Loading/> : data.length==0 ? <NoPostsFound
-                    data="No posts to show."/>:
-        <div className="home">
-            {
-                data.map(item=>{
-                    return (
-                    <div className="card home-card" key={item._id}>
-                        <h3 style={{paddingLeft:"5%",paddingTop:"2%"}}><img style={{borderRadius:"50%", maxWidth:"30px"}} src={item.postedBy.pic} alt="..."></img><Link to={item.postedBy._id!== state._id ? "/profile/"+item.postedBy._id : "/profile"}>   {item.postedBy.name}</Link> {item.postedBy._id === state._id && 
-                        <Tooltip title="delete post"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deletePost(item._id,item.photo.split('/')[7].split('.')[0])}>delete</i></Tooltip>}</h3>
-                        <div className="card-image">
-                            <img src={item.photo} style={{maxWidth:"90%", maxHeight:"90%", left:"5%"}}/>
-                        </div>
-                        <div className="card-content">
-                            <Tooltip title="like or unlike">
-                            {item.likes.includes(state._id) ? 
-                            <i className="material-icons" onClick={()=>{unlikePost(item._id)}} 
-                            style={{color:"red"}}
-                             >favorite</i>
-                             :
-                             <i className="material-icons" onClick={()=>{likePost(item._id)}} 
-                             >favorite_border</i>
-                            }
-                            </Tooltip>
-                            {state.saved.includes(item._id) ?
-                                <Tooltip title="unsave post">
-                                    <i className="material-icons" style={{float:"right"}}  onClick={()=>{UnsavePost(item._id)}}>bookmark</i>
-                                </Tooltip>
+    function disPlayContent() {
+        return (
+            <div className="home">
+                {
+                    data.map(item=>{
+                        return (
+                        <div className="card home-card" key={item._id}>
+                            <h3 style={{paddingLeft:"5%",paddingTop:"2%"}}><img style={{borderRadius:"50%", maxWidth:"30px"}} src={item.postedBy.pic} alt="..."></img><Link to={item.postedBy._id!== state._id ? "/profile/"+item.postedBy._id : "/profile"}>   {item.postedBy.name}</Link> {item.postedBy._id === state._id && 
+                            <Tooltip title="delete post"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deletePost(item._id,item.photo.split('/')[7].split('.')[0])}>delete</i></Tooltip>}</h3>
+                            <div className="card-image">
+                                <img src={item.photo} style={{maxWidth:"90%", maxHeight:"90%", left:"5%"}}/>
+                            </div>
+                            <div className="card-content">
+                                <Tooltip title="like or unlike">
+                                {item.likes.includes(state._id) ? 
+                                <i className="material-icons" onClick={()=>{unlikePost(item._id)}} 
+                                style={{color:"red"}}
+                                >favorite</i>
                                 :
-                                <Tooltip title="save post">
-                                    <i className="material-icons" style={{float:"right"}}  onClick={()=>{SavePost(item._id)}}>bookmark_border</i>
+                                <i className="material-icons" onClick={()=>{likePost(item._id)}} 
+                                >favorite_border</i>
+                                }
                                 </Tooltip>
-                            }
-                            <div>
-                            <h6>{item.likes.length} likes</h6>
-                            <h6>{item.title}</h6>
-                            <p>{item.body}</p>
-                            <div>
-                            {
-                                item.comments.length===0 ? <h6>Be first to comment</h6> : 
-                                    item.comments.slice(0,3).map(record=>{
+                                {state.saved.includes(item._id) ?
+                                    <Tooltip title="unsave post">
+                                        <i className="material-icons" style={{float:"right"}}  onClick={()=>{UnsavePost(item._id)}}>bookmark</i>
+                                    </Tooltip>
+                                    :
+                                    <Tooltip title="save post">
+                                        <i className="material-icons" style={{float:"right"}}  onClick={()=>{SavePost(item._id)}}>bookmark_border</i>
+                                    </Tooltip>
+                                }
+                                <div>
+                                <h6>{item.likes.length} likes</h6>
+                                <h6>{item.title}</h6>
+                                <p>{item.body}</p>
+                                <div>
+                                {
+                                    item.comments.length===0 ? <h6>Be first to comment</h6> : 
+                                        item.comments.slice(0,3).map(record=>{
+                                            return(
+                                                <div key={record._id} style={{marginTop:"3%"}}> 
+                                                { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
+                                                <p ><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link> {record.text}</p>
+                                                </div>
+                                            )
+                                        })
+                                }
+                                {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down offset-6" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
+                                {
+                                    showMoreIcon==false &&
+                                    item.comments.slice(3,).map(record=>{
                                         return(
                                             <div key={record._id} style={{marginTop:"3%"}}> 
                                             { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
@@ -256,53 +264,51 @@ const Home = () => {
                                             </div>
                                         )
                                     })
-                            }
-                            {showMoreIcon &&item.comments.length>3 && <Tooltip title="show more"><i className="fa fa-chevron-circle-down offset-6" onClick={()=>setshowMoreIcon(false)}></i></Tooltip>}
-                            {
-                                showMoreIcon==false &&
-                                item.comments.slice(3,).map(record=>{
-                                    return(
-                                        <div key={record._id} style={{marginTop:"3%"}}> 
-                                        { record.postedBy._id === state._id && <Tooltip title="delete comment"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deleteComment(record._id,item._id)}>delete</i></Tooltip>}
-                                        <p ><Link to ={ record.postedBy._id === state._id ? "/profile" : "/profile/"+record.postedBy._id }><span style={{fontFamily:"Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"}}> @{record.postedBy.name}-</span></Link> {record.text}</p>
-                                        </div>
-                                    )
-                                })
-                            }
-                            {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up offset-6" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
-                            </div>
-                        </div>
-                            <form style={{paddingTop:"2%"}} onSubmit={(e)=>{
-                                e.preventDefault()
-                            }}>
-                            <div className="row">
-                                <div className="input-field col-10 col-md-10">
-                                    <input type="text" placeholder="Comment" value={com} onChange={(e)=>setComment(e.target.value)}/>
-                                </div>
-                                <div style={{paddingTop:"5%"}}>
-                                
-                                { showbutton ?
-                                    <Tooltip title="post comment">
-                                    <button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={()=>makeComment(item._id)}>
-                                    <i className="material-icons" style={{float:"right"}}>send</i>
-                                    </button>
-                                    </Tooltip>
-                                    :
-                                    <button className="btn btn-primary" type="button" disabled>
-                                        <span className="spinner-border spinner-border-sm" role="status"></span>
-                                    </button>
                                 }
+                                {showMoreIcon==false && item.comments.length>3 && <Tooltip title="show less"><i className="fa fa-chevron-circle-up offset-6" onClick={()=>setshowMoreIcon(true)}></i></Tooltip>}
                                 </div>
                             </div>
-                            </form>
+                                <form style={{paddingTop:"2%"}} onSubmit={(e)=>{
+                                    e.preventDefault()
+                                }}>
+                                <div className="row">
+                                    <div className="input-field col-10 col-md-10">
+                                        <input type="text" placeholder="Comment" value={com} onChange={(e)=>setComment(e.target.value)}/>
+                                    </div>
+                                    <div style={{paddingTop:"5%"}}>
+                                    
+                                    { showbutton ?
+                                        <Tooltip title="post comment">
+                                        <button className="btn waves-effect waves-light #64b5f6 blue darken-1" onClick={()=>makeComment(item._id)}>
+                                        <i className="material-icons" style={{float:"right"}}>send</i>
+                                        </button>
+                                        </Tooltip>
+                                        :
+                                        <button className="btn btn-primary" type="button" disabled>
+                                            <span className="spinner-border spinner-border-sm" role="status"></span>
+                                        </button>
+                                    }
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                            
                         </div>
-                        
-                    </div>
-                    )
-                })
-            }
-            
-        </div>
+                        )
+                    })
+                }
+                
+            </div>
+        );
+    }
+
+
+
+    return ( 
+        <>
+        { data===undefined ? <Loading/> : data.length==0 ? <NoPostsFound
+                    data="No posts to show."/>:
+                    disPlayContent()
         }
         </>
      );
@@ -311,8 +317,3 @@ const Home = () => {
 export default Home;
 
 
-
-/*
-
-
-*/

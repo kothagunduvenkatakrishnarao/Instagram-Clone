@@ -22,8 +22,8 @@ const Navbar = () => {
       if(state){
         return  [
           <Tooltip title="search user">
-          <li key="1" style={{marginTop:"20px"}}><Link><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
-            <span className="input-group-addon"><i data-target="modal1" className="fa fa-search fa-2x modal-trigger" style={{color:"#9e9e9e",marginTop:"-10px"}}></i></span>
+          <li key="1" style={{marginTop:"20px"}}><Link><div data-target="modal1" className="input-group modal-trigger" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
+            <span className="input-group-addon"><i className="fa fa-search fa-2x " style={{color:"#9e9e9e",marginTop:"-10px"}}></i></span>
             <span>&nbsp; Search</span>
           </div></Link></li>
           </Tooltip>,
@@ -127,7 +127,7 @@ const Navbar = () => {
     return ( 
       <>
       <nav>
-        <div className="nav-wrapper bg-light" style={{maxWidth:"100%",color:"white"}}>
+        <div className="nav-wrapper bg-light" style={{maxWidth:"105%",color:"white"}}>
           <Link to={state?"/":"/signin"} className="brand-logo left">Instagram</Link>
           <a href="#" data-target="mobile-demo" className="sidenav-trigger right" ><i className="material-icons">menu</i></a>
           <ul className="right hide-on-med-and-down nav-links">
@@ -136,7 +136,7 @@ const Navbar = () => {
         </div>
       </nav>
       <ul className="sidenav right" id="mobile-demo" ref={sidenavbar}>
-            <i className="fa fa-arrow-left fa-2x" aria-hidden="true" style={{float:"right",color:"#9e9e9e",marginRight:"10px"}} onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}></i>,
+            <i className="fa fa-arrow-left fa-2x" aria-hidden="true" style={{float:"right",color:"#9e9e9e",marginRight:"10px"}} onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}></i>
             {renderMobileViewList()}
       </ul>
       <div id="modal1" className="modal col-10 col-sm-7" ref={searchModal} >
