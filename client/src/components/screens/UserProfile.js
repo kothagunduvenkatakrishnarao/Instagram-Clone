@@ -119,17 +119,17 @@ const UserProfile = () => {
                             <h6 className="col-3 col-md-4" style={{textAlign:"center"}}>following</h6>
                         </div>
                         {isfollow ?
-                            <button className="btn btn-danger col-12" style={{marginBottom:"10px"}}
+                            <button className="btn btn-danger col-11" style={{marginBottom:"10px"}}
                             onClick={()=>unfollowUser()}>
                                 unfollow
                             </button>
                             :
-                            <button className="btn waves-effect waves-light #64b5f6 blue darken-1"
+                            <button className="btn waves-effect waves-light #64b5f6 blue darken-1 col-11" style={{marginBottom:"10px"}}
                             onClick={()=>followUser()}>
                                 Follow
                             </button>
                         }
-                        <div className="badge badge-pill badge-primary d-none d-sm-block">
+                        <div className="badge badge-pill badge-primary d-none d-sm-block col-sm-11">
                         { profile.user.about.split("\n").map((item)=>
                             <li key="item">{item}</li>
                         )}

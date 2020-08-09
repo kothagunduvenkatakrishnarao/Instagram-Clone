@@ -21,9 +21,10 @@ const Navbar = () => {
 
       if(state){
         return  [
+          <Tooltip title="home"><li key="10"><Link to="/"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-home fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Home</span> </div></Link></li></Tooltip>,
           <Tooltip title="search user">
           <li key="1" style={{marginTop:"20px"}}><Link><div data-target="modal1" className="input-group modal-trigger" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
-            <span className="input-group-addon"><i className="fa fa-search fa-2x " style={{color:"#9e9e9e",marginTop:"-10px"}}></i></span>
+            <span className="input-group-addon"><i className="fa fa-search fa-2x " style={{color:"#9e9e9e"}}></i></span>
             <span>&nbsp; Search</span>
           </div></Link></li>
           </Tooltip>,
@@ -68,6 +69,7 @@ const Navbar = () => {
     const renderList = ()=>{
       if(state){
           return  [
+            <Tooltip title="home"><li key="10"><Link to="/"><div className="input-group"><i className="fa fa-home fa-2x" style={{color:"#9e9e9e"}}></i></div></Link></li></Tooltip>,
             <Tooltip title="search user">
             <li key="1"><Link><i data-target="modal1" className="fa fa-search fa-2x modal-trigger" style={{color:"#9e9e9e"}}></i></Link></li>
             </Tooltip>,

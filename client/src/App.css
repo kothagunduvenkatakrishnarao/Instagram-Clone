@@ -3,7 +3,9 @@
 a{
   color:black !important;
 }
-
+body{
+  overflow-x: hidden;
+}
 .brand-logo, h2{
   font-family: 'Grand Hotel', cursive;
   margin-left: 10%;

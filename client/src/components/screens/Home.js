@@ -5,7 +5,6 @@ import {Link} from 'react-router-dom'
 import Tooltip from '@material-ui/core/Tooltip';
 import M from 'materialize-css'
 import NoPostsFound from  './NoPosts'
-import {Online,Offline} from 'react-detect-offline'
 
 
 const Home = () => {
@@ -215,7 +214,7 @@ const Home = () => {
                             <h3 style={{paddingLeft:"5%",paddingTop:"2%"}}><img style={{borderRadius:"50%", maxWidth:"30px"}} src={item.postedBy.pic} alt="..."></img><Link to={item.postedBy._id!== state._id ? "/profile/"+item.postedBy._id : "/profile"}>   {item.postedBy.name}</Link> {item.postedBy._id === state._id && 
                             <Tooltip title="delete post"><i className="material-icons" style={{float:"right",color:"red"}} onClick={()=>deletePost(item._id,item.photo.split('/')[7].split('.')[0])}>delete</i></Tooltip>}</h3>
                             <div className="card-image">
-                                <img src={item.photo} style={{maxWidth:"90%", maxHeight:"90%", left:"5%"}}/>
+                                <img src={item.photo} style={{maxWidth:"90%",maxHeight:"450px",left:"5%"}}/>
                             </div>
                             <div className="card-content">
                                 <Tooltip title="like or unlike">
