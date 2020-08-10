@@ -5,6 +5,7 @@ import M from 'materialize-css'
 import Tooltip from '@material-ui/core/Tooltip';
 
 
+
 const Navbar = () => {
     const searchModal = useRef(null)
     const sidenavbar = useRef(null)
@@ -17,18 +18,17 @@ const Navbar = () => {
         M.Sidenav.init(sidenavbar.current);
     },[])
 
+
     const renderMobileViewList = () =>{
 
       if(state){
         return  [
-          <Tooltip title="home"><li key="10"><Link to="/"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-home fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Home</span> </div></Link></li></Tooltip>,
-          <Tooltip title="search user">
-          <li key="1" style={{marginTop:"20px"}}><Link><div data-target="modal1" className="input-group modal-trigger" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
+          <li key="10"><Link to="/"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-home fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Home</span> </div></Link></li>,
+          <li key="1"><Link><div data-target="modal1" className="input-group modal-trigger" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
             <span className="input-group-addon"><i className="fa fa-search fa-2x " style={{color:"#9e9e9e"}}></i></span>
             <span>&nbsp; Search</span>
-          </div></Link></li>
-          </Tooltip>,
-          <Tooltip title="my following post"><li key="4"><Link to="/myfollowingpost">
+          </div></Link></li>,
+          <li key="4"><Link to="/myfollowingpost">
             <div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
             <span className="fa-stack" style={{fontSize:"93%",color:"#9e9e9e"}}>
             <i className="fa fa-users fa-stack-1x" ></i>
@@ -36,12 +36,11 @@ const Navbar = () => {
           </span>
           <span style={{marginTop:"-10px"}}>&nbsp; My following users</span> 
           </div>
-          </Link></li></Tooltip>,
-          <Tooltip title="create post"><li key="3"><Link to="/createpost"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-plus-square-o fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Create Post</span> </div></Link></li></Tooltip>,
-          <Tooltip title="saved posts"><li key="5"><Link to="/savedposts"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-floppy-o fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Saved Posts</span> </div></Link></li></Tooltip>,
-          <Tooltip title="settings"><li key="6"><Link to="/editprofile"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-cog fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Edit Profile</span> </div></Link></li></Tooltip>,
-          <Tooltip title="user profile"><li key="2"><Link to="/profile"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><img src={state && state.pic} style={{width:"26px",height:"26px",borderRadius:"13px",color:"#9e9e9e"}}/><span style={{marginTop:"-10px"}}>&nbsp; Profile</span></div></Link></li></Tooltip>,
-          <Tooltip title="log out">
+          </Link></li>,
+          <li key="3"><Link to="/createpost"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-plus-square-o fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Create Post</span> </div></Link></li>,
+          <li key="5"><Link to="/savedposts"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-floppy-o fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Saved Posts</span> </div></Link></li>,
+          <li key="6"><Link to="/editprofile"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><i className="fa fa-cog fa-2x" style={{color:"#9e9e9e"}}></i><span style={{marginTop:"-10px"}}>&nbsp; Edit Profile</span> </div></Link></li>,
+          <li key="2"><Link to="/profile"><div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}><img src={state && state.pic} style={{width:"26px",height:"26px",borderRadius:"13px",color:"#9e9e9e"}}/><span style={{marginTop:"-10px"}}>&nbsp; Profile</span></div></Link></li>,
           <li key="7"><Link>
           <div className="input-group" onClick={()=>M.Sidenav.getInstance(sidenavbar.current).close()}>
             <i className="fa fa-sign-out fa-2x" style={{color:"#9e9e9e"}}
@@ -52,7 +51,7 @@ const Navbar = () => {
                   type:"CLEAR",
                 })
                 history.push("/signin")
-              }}></i><span style={{marginTop:"-10px"}}>&nbsp; Logout</span></div></Link></li></Tooltip>
+              }}></i><span style={{marginTop:"-10px"}}>&nbsp; Logout</span></div></Link></li>
               
         ]
     }
@@ -70,9 +69,7 @@ const Navbar = () => {
       if(state){
           return  [
             <Tooltip title="home"><li key="10"><Link to="/"><div className="input-group"><i className="fa fa-home fa-2x" style={{color:"#9e9e9e"}}></i></div></Link></li></Tooltip>,
-            <Tooltip title="search user">
-            <li key="1"><Link><i data-target="modal1" className="fa fa-search fa-2x modal-trigger" style={{color:"#9e9e9e"}}></i></Link></li>
-            </Tooltip>,
+            <Tooltip title="search user"><li key="1"><Link><i data-target="modal1" className="fa fa-search fa-2x modal-trigger" style={{color:"#9e9e9e"}}></i></Link></li></Tooltip>,
             <Tooltip title="my following post"><li key="4"><Link to="/myfollowingpost">
               <span className="fa-stack" style={{fontSize:"93%",marginTop:"-150%",color:"#9e9e9e"}}>
               <i className="fa fa-users fa-stack-1x" ></i>

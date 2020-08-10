@@ -18,8 +18,6 @@ const Profile = () => {
         })
     },[])
     
-
-
     
     return ( 
         <>
@@ -71,6 +69,7 @@ const Profile = () => {
                 </div>
             }
         </div>
+              
         }
         </>
      );

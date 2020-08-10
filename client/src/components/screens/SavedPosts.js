@@ -14,6 +14,7 @@ const SavedPosts = () => {
     const [showbutton,setButton] = useState(true)
     const [showMoreIcon,setshowMoreIcon] = useState(true)
 
+
     useEffect(()=>{
         fetch('/showsavedposts',{
             method:"get",
@@ -179,7 +180,7 @@ const SavedPosts = () => {
                     <div className="card home-card" key={item._id}>
                         <h5 style={{paddingLeft:"5%",paddingTop:"2%"}}><img style={{borderRadius:"50%", maxWidth:"30px"}} src={item.postedBy.pic} alt="..."></img><Link to={item.postedBy._id!== state._id ? "/profile/"+item.postedBy._id : "/profile"}>{item.postedBy.name}</Link></h5>
                         <div className="card-image">
-                            <img src={item.photo} style={{width:"90%", maxHeight:"450px", left:"5%"}}/>
+                            <img src={item.photo} style={{maxWidth:"90%", maxHeight:"450px", left:"5%"}} onDoubleClick={()=>{!item.likes.includes(state._id) && likePost(item._id)}}/>
                         </div>
                         <div className="card-content">
                         <Tooltip title="like or unlike" style={{fontSize:"large"}}>

@@ -26,14 +26,16 @@ input:focus {
   padding: 20px;
 }
 .gallery{
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
-  justify-content: space-around ;
+  justify-content: space-around !important;
 }
 
 .item{
   width: 270px;
   height: 270px;
+  max-width: 270px;
+  max-height: 270px;
 }
 
 .home-card{
